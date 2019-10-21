@@ -1,0 +1,19 @@
+{
+  "name": "mini-netflix-app-backend",
+  "version": "1.0.0",
+  "description": "Backend for my mini-netflix app",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "firebase": "^7.2.1",
+    "firebase-admin": "^8.6.1",
+    "nodemon": "^1.19.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bigbadwolf",
+  "license": "ISC"
+}
