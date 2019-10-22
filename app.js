@@ -2,7 +2,6 @@ let express = require('express');
 let firebase = require('firebase');
 let bodyParser = require('body-parser');
 let cors = require('cors');
-let port = process.env.port || 8080;
 
 let app = express();
 app.use(cors());
@@ -96,6 +95,6 @@ app.put('/:id', async (req, res, next) => {
 //   // Traitement des données
 // });
 
-app.listen(port, () => {
+app.listen(8080, () => {
   console.log('Server is listening on port 8080');
 });
