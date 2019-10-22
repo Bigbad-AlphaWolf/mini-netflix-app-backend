@@ -22,9 +22,9 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-// app.get('/', (request, response) => {
-//   response.send('Bonjour');
-// });
+app.get('/', (request, response) => {
+  response.send('Bonjour');
+});
 
 // get all movies in my firestore database
 app.get('/all-movies', async (req, res, next) => {
