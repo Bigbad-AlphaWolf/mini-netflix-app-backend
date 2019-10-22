@@ -1,8 +1,10 @@
 let express = require('express');
 let firebase = require('firebase');
 let bodyParser = require('body-parser');
-let app = express();
+let cors = require('cors');
 
+let app = express();
+app.use(cors());
 app.use(bodyParser.json()); //need to parse HTTP request body
 
 var firebaseConfig = {
@@ -20,9 +22,9 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-app.get('/', (request, response) => {
-  response.send('Bonjour');
-});
+// app.get('/', (request, response) => {
+//   response.send('Bonjour');
+// });
 
 // get all movies in my firestore database
 app.get('/all-movies', async (req, res, next) => {
@@ -30,12 +32,31 @@ app.get('/all-movies', async (req, res, next) => {
     const noteSnapshot = await db.collection('mini-netflix-andela').get();
     const notes = [];
     noteSnapshot.forEach(doc => {
-      notes.push({
-        id: doc.id,
-        data: doc.data().title
-      });
+      notes.push(Object.assign({}, doc.data(), { id: doc.id }));
     });
     res.json(notes);
+  } catch (e) {
+    next(e);
+  }
+});
+
+// get all favorites movies in my firestore database
+app.get('/all-favorite-movies', async (req, res, next) => {
+  try {
+    const movies = [];
+    let dbRef = await db
+      .collection('mini-netflix-andela')
+      .where('favorite', '==', true)
+      .get()
+      .then(movie => {
+        if (!movie) {
+          res.status(404).send({ error: 'Movie Not found' });
+        }
+        movie.forEach(doc => {
+          movies.push(Object.assign({}, doc.data(), { id: doc.id }));
+        });
+        res.json(movies);
+      });
   } catch (e) {
     next(e);
   }
@@ -55,7 +76,6 @@ app.put('/:id', async (req, res, next) => {
       .then(function(doc) {
         if (doc.exists) {
           movieDocRef.set(movie, { merge: true });
-          console.log('Document data:', doc.data());
           res.json(movie);
         } else {
           res.status(404).send({ error: 'Movie Not found' });
@@ -71,9 +91,9 @@ app.put('/:id', async (req, res, next) => {
   }
 });
 
-app.post('/', (request, response) => {
-  // Traitement des données
-});
+// app.post('/', (request, response) => {
+//   // Traitement des données
+// });
 
 app.listen(8080, () => {
   console.log('Server is listening on port 8080');
